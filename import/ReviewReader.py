@@ -1,4 +1,5 @@
 __author__ = 'Johannes'
+import os
 import json
 import exceptions
 import re
@@ -6,9 +7,15 @@ from operator import itemgetter
 
 chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 struc = '.;,:-!?()\"+'
-dictionary = {}
 pattern = re.compile('"\b([a-zA-Z]+)\b"')
 
+pathToData = '../../data'
+importFileNames = ['Office_Products']
+dictionary = {}
+outputFolderDict = 'dictionary'
+outputDictionary = 'dict.txt'
+outputSortedDictionary = 'sorted_dict.txt'
+outputFolderSamples = 'samples'
 
 def num(s):
     try:
@@ -70,11 +77,13 @@ def addToDictionary(words):
                 dictionary[g] = 1
         #m = re.match('"\b[a-zA-Z]+\b"', w, re.I)
 
-convertData('../../data/Office_Products')
+convertData(pathToData + '/' + importFileNames[0])
 
 print str(len(dictionary.keys())) + " distinct words in dictionary"
 
-dictFile = open('../../data/dict.txt', 'w+')
+if not os.path.exists(pathToData + '/' + outputFolderDict):
+    os.makedirs(pathToData + '/' + outputFolderDict)
+dictFile = open(pathToData + '/' + outputFolderDict + '/' + outputDictionary, 'w+')
 dictFile.write(json.dumps(dictionary))
 dictFile.close()
 
@@ -84,6 +93,6 @@ for key in dictionary:
 
 sdictionary = sorted(sdictionary, key=itemgetter(1), reverse=True)
 
-sdictFile = open('../../data/sorted_dict.txt', 'w+')
+sdictFile = open(pathToData + '/' + outputFolderDict + '/' + outputSortedDictionary, 'w+')
 sdictFile.write(json.dumps(sdictionary))
 sdictFile.close()

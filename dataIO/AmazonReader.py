@@ -123,7 +123,7 @@ class AmazonReader(object):
             outputFile.close()
             print "Exported " + str(recordCounter) + " Records of " + str(file) + "."
 
-    def createDictionaries(self):
+    def createDictionaries(self, threshold):
         if not self.es.indices.exists(index=self.index):
             self.importAll()
 
@@ -151,7 +151,7 @@ class AmazonReader(object):
 
             sdictionary = []
             for key in dictionary:
-                if dictionary[key] >= AmazonReader.dictionaryThreshold:
+                if dictionary[key] >= threshold:
                     sdictionary.append((key, dictionary[key]))
             sdictionary = sorted(sdictionary, key=itemgetter(1), reverse=True)
             outputFile.write(json.dumps(sdictionary))
